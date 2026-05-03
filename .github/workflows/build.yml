@@ -9,9 +9,6 @@ jobs:
     timeout-minutes: 360
 
     steps:
-      - name: Espacio en disco
-        run: df -h
-
       - name: Instalar dependencias
         run: |
           sudo apt update
@@ -31,25 +28,20 @@ jobs:
           git config --global user.email "kevinabelsanchezhuaman@gmail.com"
           git config --global user.name "kiev12"
 
-      - name: Sincronizar fuentes LineageOS
+      - name: Sincronizar LineageOS
         run: |
           mkdir -p ~/android/lineage
           cd ~/android/lineage
-          repo init -u https://github.com/LineageOS/android.git \
-            -b lineage-22.1 --git-lfs --depth=1
+          repo init -u https://github.com/LineageOS/android.git -b lineage-22.1 --git-lfs --depth=1
           repo sync -c -j4 --force-sync --no-clone-bundle --no-tags
 
       - name: Clonar device trees
         run: |
           cd ~/android/lineage
-          git clone https://github.com/TU_USUARIO/android_device_motorola_bangkk.git \
-            device/motorola/bangkk
-          git clone https://github.com/TU_USUARIO/android_device_motorola_sm6375-common.git \
-            device/motorola/sm6375-common
-          git clone https://github.com/TU_USUARIO/android_kernel_motorola_sm6375.git \
-            kernel/motorola/sm6375
-          git clone https://github.com/LineageOS/android_hardware_motorola.git \
-            hardware/motorola
+          git clone https://github.com/Motorola-SM6375-Devs/android_device_motorola_bangkk.git device/motorola/bangkk
+          git clone https://github.com/Motorola-SM6375-Devs/android_device_motorola_sm6375-common.git device/motorola/sm6375-common
+          git clone https://github.com/Motorola-SM6375-Devs/android_kernel_motorola_sm6375.git kernel/motorola/sm6375
+          git clone https://github.com/LineageOS/android_hardware_motorola.git hardware/motorola
 
       - name: Compilar
         run: |
@@ -58,7 +50,7 @@ jobs:
           breakfast bangkk
           brunch bangkk
 
-      - name: Subir ROM compilada
+      - name: Subir ROM
         uses: actions/upload-artifact@v4
         with:
           name: lineage-bangkk
